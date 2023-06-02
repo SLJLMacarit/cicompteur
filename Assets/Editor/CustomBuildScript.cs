@@ -7,10 +7,21 @@ public class CustomBuildScript
     [MenuItem("Build/Build Windows")]
     static void PerformBuild()
     {
+        string[] args = System.Environment.GetCommandLineArgs();
+        string buildFilePath = "./MegaQuantumBuild/BuildCI.exe";
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == "+bfp")
+            {
+                buildFilePath = args[i + 1];
+            }
+        }
+
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         buildPlayerOptions.scenes = new[] { "Assets/Scenes/Avec Espace/Compteur.unity" };
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
-        buildPlayerOptions.locationPathName = "./Build-CLI/BuildCompteur.exe";
+        //buildPlayerOptions.locationPathName = "./Build-CLI/BuildCompteur.exe";
+        buildPlayerOptions.locationPathName = buildFilePath;
         buildPlayerOptions.options = BuildOptions.CleanBuildCache;
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         BuildSummary summary = report.summary;
